@@ -1,63 +1,38 @@
 <!doctype html>
 <html lang="ru">
 <head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Лабораторная №6 — Анимации и постобработка</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Скелет в 3D — Лабораторная работа № 5</title>
+<script type="module" src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.4.0/model-viewer.min.js"></script>
 <style>
-:root{font-family:system-ui,-apple-system,'Segoe UI',sans-serif;color:#f2f5ff;background:#101625}*{box-sizing:border-box}body{margin:0}header{padding:23px max(22px,5vw) 12px}h1{font-size:clamp(22px,3vw,34px);margin:0 0 6px}p{color:#bac6da;margin:0}.layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:20px;padding:15px max(22px,5vw) 28px}.stage{background:linear-gradient(160deg,#25314a,#151e30);border:1px solid #34415b;border-radius:18px;overflow:hidden;min-height:540px;position:relative}model-viewer{width:100%;height:min(74vh,720px);min-height:540px;--poster-color:transparent}.status{position:absolute;bottom:16px;left:16px;background:#111a2cdd;padding:10px 14px;border-radius:9px;font-size:13px}.panel{background:#1a2437;border:1px solid #34415b;border-radius:18px;padding:22px;align-self:start}h2{font-size:18px;margin:0 0 15px}h3{font-size:14px;margin:23px 0 10px;color:#c8d5e9}.row{display:flex;align-items:center;gap:10px;margin:12px 0}.row input{accent-color:#75d6dc;width:17px;height:17px}button{background:#293955;color:#fff;border:1px solid #53688b;border-radius:9px;padding:10px 12px;cursor:pointer}button:hover{background:#3c5176}.buttons{display:flex;flex-wrap:wrap;gap:8px}button.active{background:#0d787e;border-color:#75d6dc}.muted{font-size:13px;color:#b2c1d8;line-height:1.5}footer{padding:0 max(22px,5vw) 22px;color:#9daec6;font-size:12px}@media(max-width:800px){.layout{grid-template-columns:1fr}.stage,model-viewer{min-height:430px}model-viewer{height:60vh}}
+:root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:#0c1423;color:#f5f8ff}*{box-sizing:border-box}body{margin:0}header{text-align:center;padding:42px 18px 18px}h1{font-size:clamp(28px,5vw,44px);margin:0 0 10px}p{color:#b8c8db;line-height:1.55}.subtitle{margin:0}.wrap{max-width:1100px;margin:0 auto;padding:20px}section{background:linear-gradient(145deg,#24324b,#121d31);border:1px solid #354662;border-radius:22px;overflow:hidden}model-viewer{width:100%;height:min(68vh,650px);min-height:410px;--poster-color:transparent}nav{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:20px}button,.ar-button{border:1px solid #5e7999;border-radius:12px;background:#263c59;color:white;padding:12px 18px;cursor:pointer;font-size:15px}button:hover,.ar-button:hover{background:#315c75}.ar-button{position:absolute;bottom:18px;right:18px;background:#0d7882}button:focus-visible{outline:3px solid #82d8df}.help{text-align:center;margin:0 0 12px}.details{max-width:820px;margin:24px auto;color:#b8c8db}.details strong{color:white}footer{text-align:center;color:#8295ae;font-size:13px;padding:14px 20px 30px}@media(max-width:600px){header{padding-top:25px}model-viewer{min-height:360px;height:58vh}}
 </style>
-<script type="importmap">
-{"imports":{"three":"./three-shim.js","three-real":"https://cdn.jsdelivr.net/npm/three@0.183.0/build/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.183.0/examples/jsm/"}}
-</script>
-<script type="module">
-import 'https://cdn.jsdelivr.net/npm/@google/model-viewer/dist/model-viewer-module.min.js';
-import 'https://cdn.jsdelivr.net/npm/@google/model-viewer-effects/dist/model-viewer-effects.min.js';
-</script>
 </head>
 <body>
-<header><h1>Анимации скелета и эффекты постобработки</h1><p>Лабораторная работа № 6 · Blender → GLB → model-viewer</p></header>
-<div class="layout">
-<div class="stage">
-<model-viewer id="viewer" src="./skeleton_lab6.glb" alt="Анимированный low-poly скелет" camera-controls auto-rotate shadow-intensity="0.8" exposure="1.1" autoplay animation-name="idle" animation-crossfade-duration="700" interaction-prompt="none">
-  <effect-composer render-mode="quality">
-    <bloom-effect id="bloom" strength="0.9" radius="0.65" threshold="0.55"></bloom-effect>
-    <pixelate-effect id="pixelate" granularity="5" blend-mode="skip"></pixelate-effect>
-  </effect-composer>
+<header><h1>Скелет в 3D</h1><p class="subtitle">Интерактивная веб-презентация модели · Лабораторная работа № 5</p></header>
+<main class="wrap">
+<section>
+<model-viewer id="model" src="./skeletonWalk.glb" ios-src="./skeletonWalkkk.usdz" alt="Низкополигональный скелет с бирюзовыми глазами и темным шлемом" camera-controls auto-rotate autoplay ar ar-modes="webxr scene-viewer quick-look" shadow-intensity="0.7" shadow-softness="1" exposure="1" interaction-prompt="auto">
+<button class="ar-button" slot="ar-button" type="button">Посмотреть в AR</button>
 </model-viewer>
-<div class="status" id="status">Загрузка модели…</div>
-</div>
-<aside class="panel">
-<h2>Управление анимацией</h2>
-<div class="buttons" id="animationButtons"><button data-animation="idle" class="active">Idle</button><button data-animation="walk">Walk</button><button data-animation="run">Run</button></div>
-<label class="row"><input id="auto" type="checkbox" checked> Автоматическая смена (каждые 5 с)</label>
-<label class="row"><input id="play" type="checkbox" checked> Воспроизводить анимацию</label>
-<p class="muted">Плавный переход между клипами: 700 мс.</p>
-<h3>Постобработка</h3>
-<label class="row"><input id="bloomOn" type="checkbox" checked> Bloom — свечение</label>
-<label class="row"><input id="pixelateOn" type="checkbox"> Pixelate — пикселизация</label>
-<div class="buttons"><button id="none">Без эффектов</button><button id="onlyBloom">Только Bloom</button><button id="onlyPixelate">Только Pixelate</button><button id="both">Оба эффекта</button></div>
-<h3>Для отчёта</h3><p class="muted">Сделайте четыре скриншота: без эффектов, Bloom, Pixelate, оба эффекта. Проверьте, что во время каждого варианта анимация продолжается.</p>
-</aside>
-</div>
-<footer>Для работы необходим интернет (библиотеки загружаются с CDN) и локальный сервер для файлов GLB.</footer>
+</section>
+<nav aria-label="Управление моделью">
+<button id="rotate" type="button">Остановить вращение</button>
+<button id="animate" type="button">Остановить анимацию</button>
+<button id="reset" type="button">Вернуть ракурс</button>
+</nav>
+<p class="help">Зажмите левую кнопку мыши, чтобы повернуть модель. Колёсиком можно изменить масштаб.</p>
+<div class="details"><p><strong>О модели:</strong> стилизованный низкополигональный скелет с анимацией ходьбы, подготовленный в Blender. Для браузера используется GLB; для просмотра на устройствах Apple подключён отдельный USDZ.</p><p id="status" role="status">Загрузка модели…</p></div>
+</main>
+<footer>Blender → GLB / USDZ → model-viewer · Для загрузки библиотеки требуется интернет</footer>
 <script>
-const viewer=document.querySelector('#viewer');
-const status=document.querySelector('#status');
-const names=['idle','walk','run']; let index=0;
-function choose(name){index=names.indexOf(name); viewer.animationName=name; document.querySelectorAll('[data-animation]').forEach(b=>b.classList.toggle('active',b.dataset.animation===name));status.textContent='Анимация: '+name;}
-viewer.addEventListener('load',()=>{status.textContent='Модель загружена · idle';choose('idle');viewer.play();});
-viewer.addEventListener('error',e=>{status.textContent='Ошибка загрузки GLB. Запустите локальный сервер.';console.error(e);});
-document.querySelectorAll('[data-animation]').forEach(b=>b.addEventListener('click',()=>choose(b.dataset.animation)));
-setInterval(()=>{if(document.querySelector('#auto').checked&&document.querySelector('#play').checked&&viewer.loaded)choose(names[(index+1)%names.length]);},5000);
-document.querySelector('#play').addEventListener('change',e=>{e.target.checked?viewer.play():viewer.pause();});
-const bloom=document.querySelector('#bloom'), pixelate=document.querySelector('#pixelate');
-function updateEffects(){bloom.setAttribute('blend-mode',document.querySelector('#bloomOn').checked?'default':'skip');pixelate.setAttribute('blend-mode',document.querySelector('#pixelateOn').checked?'default':'skip');}
-for(const id of ['bloomOn','pixelateOn'])document.getElementById(id).addEventListener('change',updateEffects);
-function setEffects(b,p){document.querySelector('#bloomOn').checked=b;document.querySelector('#pixelateOn').checked=p;updateEffects();}
-document.querySelector('#none').onclick=()=>setEffects(false,false);
-document.querySelector('#onlyBloom').onclick=()=>setEffects(true,false);
-document.querySelector('#onlyPixelate').onclick=()=>setEffects(false,true);
-document.querySelector('#both').onclick=()=>setEffects(true,true);
-updateEffects();
+const model=document.getElementById('model');const status=document.getElementById('status');
+model.addEventListener('load',()=>{status.textContent='Модель загружена. Вращение и анимация доступны.';});
+model.addEventListener('error',()=>{status.textContent='Ошибка загрузки модели. Проверьте расположение GLB и запуск локального сервера.';});
+document.getElementById('rotate').addEventListener('click',e=>{model.autoRotate=!model.autoRotate;e.currentTarget.textContent=model.autoRotate?'Остановить вращение':'Включить вращение';});
+document.getElementById('animate').addEventListener('click',e=>{if(model.paused){model.play();e.currentTarget.textContent='Остановить анимацию';}else{model.pause();e.currentTarget.textContent='Включить анимацию';}});
+document.getElementById('reset').addEventListener('click',()=>{model.cameraOrbit='auto auto auto';model.fieldOfView='auto';model.jumpCameraToGoal();});
 </script>
-</body></html>
+</body>
+</html>
